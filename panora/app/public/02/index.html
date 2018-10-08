@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>THREE.Group 对象组合</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden; /* 溢出隐藏 */
+        }
+    </style>
+    <script src="js/three-r93.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/dat.gui.min.js"></script>
+    <script src="js/stats.min.js"></script>
+    <script src="OrbitControls.js"></script>
+</head>
+<body>
+<script>
+
+    let scene, camera, renderer, controls, guiControls;
+    let stats = initStats();
+
+    /* 场景 */
+    function initScene() {
+
+        scene = new THREE.Scene();
+
+    }
+
+    /* 相机 */
+    function initCamera() {
+
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(30, 20, 50);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    }
+
+    /* 渲染器 */
+    function initRender() {
+
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+
+    }
+
+    /* 灯光 */
+    function initLight() {
+
+
+    }
+
+    /*方向箭头*/
+    function arrows(){
+        //创建三个贴图;
+        var frontTex = THREE.ImageUtils.loadTexture("../img/frontRow.png");
+        var backTex  = THREE.ImageUtils.loadTexture("../img/backRow.png");
+        var leftTex  = THREE.ImageUtils.loadTexture("../img/rightRow.png");
+        var rightTex = THREE.ImageUtils.loadTexture("../img/leftRow.png");
+        //创建两种几何体，上，左右（公用一个)
+        var frontGeometry = new THREE.BoxGeometry(30, 20, 0.001);
+        var backtGeometry = new THREE.BoxGeometry(30, 20, 0.001);
+        var leftRightGeometry = new THREE.BoxGeometry(30, 20, 0.001);
+        //创建材质
+        var frontMat = new THREE.MeshBasicMaterial({
+            map: frontTex, blending: 1, transparent: true,
+            side: 2
+        })
+        var backMat = new THREE.MeshBasicMaterial({
+            map: backTex, blending: 1, transparent: true,
+            side: 2
+        })
+        var leftMat  = new THREE.MeshBasicMaterial({ map: leftTex, blending: 1, transparent: true })
+        var rightMat = new THREE.MeshBasicMaterial({ map: rightTex, blending: 1, transparent: true })
+        //创建图标模型
+        var frontLabel = new THREE.Mesh(frontGeometry, frontMat);
+        frontLabel.name = 'frontLabel';
+        frontLabel.position.y -= 40;
+        frontLabel.rotation.x = -1
+        frontLabel.position.z = -27
+
+
+
+
+
+        var backLabel = new THREE.Mesh(frontGeometry, backMat);
+        backLabel.name = 'backLabel';
+        backLabel.scale.x = -1
+        backLabel.position.y  -= 50;
+
+        backLabel.rotation.x = -1
+        backLabel.position.z = 27
+
+        var leftLabel = new THREE.Mesh(leftRightGeometry, leftMat);
+        leftLabel.name = 'leftLabel';
+        leftLabel.position.x  += 20;
+        leftLabel.position.y  -= 45;
+        leftLabel.rotation.x = -1
+
+        var rightLabel = new THREE.Mesh(leftRightGeometry, rightMat);
+        rightLabel.name = 'rightLabel';
+        rightLabel.position.x -= 20;
+        rightLabel.position.y  -= 45;
+        rightLabel.rotation.x = -1;
+
+        scene.add(frontLabel)
+        scene.add(backLabel)
+        scene.add(leftLabel)
+        scene.add(rightLabel)
+    }
+
+    /* 控制器 */
+    function initControls() {
+
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        console.log("方向控制",controls);
+
+        /* 属性参数默认 */
+
+    }
+
+    /* 调试插件 */
+    function initGui() {
+
+
+    }
+
+    /* 场景中的内容 */
+    function initContent() {
+
+        let dir = new THREE.Vector3( 0, 2, 0 );
+
+        dir.normalize();
+
+        let origin = new THREE.Vector3( 0, 0, 0 );
+        let length = 5;
+        let hex = 0xff0000;
+
+        let arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+        scene.add( arrowHelper );
+
+        let texture = new THREE.TextureLoader().load('image/1.png');
+
+        let sphereGeometry = new THREE.SphereGeometry(1000, 50, 50);
+        sphereGeometry.scale(-1, 1, 1);
+
+        let sphereMaterial = new THREE.MeshBasicMaterial({map: texture});
+
+        let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+        scene.add(sphere);
+
+    }
+
+    /* 性能插件 */
+    function initStats() {
+
+        let stats = new Stats();
+
+        document.body.appendChild(stats.domElement);
+
+        return stats;
+
+    }
+
+    /* 窗口变动触发 */
+    function onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+    }
+
+    /* 数据更新 */
+    function update() {
+
+        stats.update();
+
+    }
+
+    /* 初始化 */
+    function init() {
+
+        initScene();
+        initCamera();
+        initRender();
+        initLight();
+        initControls();
+        initContent();
+        initGui();
+        arrows()
+
+        /* 监听事件 */
+        window.addEventListener('resize', onWindowResize, false);
+
+    }
+
+    /* 循环渲染 */
+    function animate() {
+
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        update();
+
+    }
+
+    /* 初始加载 */
+    (function () {
+        console.log("three init start...");
+
+        init();
+        animate();
+
+        console.log("three init send...");
+    })();
+
+</script>
+</body>
+</html>

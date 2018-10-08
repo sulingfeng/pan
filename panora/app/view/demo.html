@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=af64580c6d02054a8bec9c19711e4918"></script>
+    <style>
+        body{margin: 0;padding: 0;}
+        .pano{position: fixed;right: 0;bottom: 0;width: 86px;height: 59px;background: url("public/img/pan.png")no-repeat;cursor: pointer;}
+        .pano:hover span{background: #0096FF;color: #fff;}
+    </style>
+</head>
+<body>
+<div id="container" style="width:1920px; height:939px"></div>
+<div class="pano" id="pano">
+    <span>全景</span>
+</div>
+</body>
+<script>
+    /*var map = new AMap.Map('container',{
+     mapStyle: 'amap://styles/be854cf59db8d84c943b08e14c5fb60f', //设置地图的显示样式
+     });*/
+
+    var map = new AMap.Map('container', {
+        resizeEnable: true,
+        center: [104.7191435416,31.511629128]
+    });
+    var enName = "18d44a407d373754a01efa084430e282";
+    refresh(enName);
+    function refresh(enName) {
+        map.setMapStyle('amap://styles/'+enName);
+    }
+
+    AMap.event.addListener(map, 'click', getLnglat);
+
+    function getLnglat(e) {
+        var x = e.lnglat.getLng();
+        var y = e.lnglat.getLat();
+
+        console.log("当前坐标",x,y);
+    }
+
+
+
+    var pan = document.getElementById('pano');
+    pan.onclick  = function(){
+        sessionStorage.setItem('x','104.7192330416')
+        sessionStorage.setItem('y','31.5215110812')
+        window.location = "public/demo.html";
+    }
+
+</script>
+</html>

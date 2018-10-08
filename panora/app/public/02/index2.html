@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>THREE.Group 对象组合</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden; /* 溢出隐藏 */
+        }
+        .wrapper{position: fixed;z-index: -1;top:0;bottom:0;width: 1920px;}
+    </style>
+    <script src="js/three-r93.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/dat.gui.min.js"></script>
+    <script src="js/stats.min.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/map.js"></script>
+</head>
+<body>
+<img class="wrapper" src="" alt=""/>
+<script>
+    var map = new panMap("http://192.168.3.253:5200/pano")
+    animate()
+    function animate() {
+        requestAnimationFrame(animate);
+        map.animate()
+    }
+
+</script>
+</body>
+</html>

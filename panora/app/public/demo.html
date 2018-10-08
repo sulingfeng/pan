@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>全景案例</title>
+    <style>
+        .pano{position: fixed;right: 0;bottom: 0;width: 86px;height: 59px;background: url("img/pan2.png")no-repeat;cursor: pointer;z-index: 10;}
+        .pano:hover span{background: #0096FF;color: #fff;cursor: pointer;}
+	</style>
+	<script src="js/libs/jquery-2.1.4.min.js"></script>
+	<!--读取配置文件-->
+	<script src="js/config.js"></script>
+</head>
+<body>
+<div id="photosphere"></div>
+<div class="pano" id="pano">
+    <span>地图</span>
+</div>
+<script>
+    var id = "photosphere";
+    var x =104.7191435416;
+    var y = 31.511629128;
+    var imgId = "00000000-01-20170107032411369";
+
+
+    var x1 = sessionStorage.getItem('x');
+    var y1 = sessionStorage.getItem('y');
+    var img = new serverUtil().xyGetImg(x,y);
+    var panomap = new panoramicMap(id,img.x,img.y,img.id);
+
+
+
+    var pan = document.getElementById('pano');
+    pan.onclick  = function(){
+        window.location = "/1";
+    }
+</script>
+</body>
+</html>
