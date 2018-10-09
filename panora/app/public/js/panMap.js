@@ -49,8 +49,6 @@ class panoramicMap{
             count++;
         },100);
 
-
-
         function loadData(){
             panoramicMapService.sceneFromLonLat({
                 x:that.options.lon,
@@ -116,42 +114,7 @@ class panoramicMap{
 
     addRaw(){
         var that = this;
-
-
-
         var panoramicMapService = this.panoramicMapService;
-        function handleSelect2(mesh) {
-            var options = {
-                x:that.options.lat,
-                y:that.options.lon
-            }
-            console.log("查看看看看原点位置",options)
-            if(mesh.name == "frontLabel"){
-                options.y = options.y+0.00005;
-                that.options.lon = options.y+0.00005;
-                var info = panoramicMapService.sceneFromLonLat(options);
-                that.changeScene(info.id);
-                console.log("向前",info)
-            }else if(mesh.name == "backLabel"){
-                options.y = options.y-0.00005;
-                that.options.lon = options.y-0.00005;
-                var info = panoramicMapService.sceneFromLonLat(options);
-                that.changeScene(info.id);
-                console.log("向后")
-            }else if(mesh.name == "rightLabel"){
-                options.x = options.x+0.00005;
-                that.options.lat = options.x+0.00005;
-                var info = panoramicMapService.sceneFromLonLat(options);
-                that.changeScene(info.id);
-                console.log("向右",info)
-            }else if(mesh.name == "leftLabel"){
-                options.x = options.x-0.00005;
-                that.options.lat = options.x-0.00005;
-                var info = panoramicMapService.sceneFromLonLat(options);
-                that.changeScene(info.id);
-                console.log("向左",info)
-            }
-        }
         var topDot = new Array;
         function handleSelect(mesh) {
             var options = {
